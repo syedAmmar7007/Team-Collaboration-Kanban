@@ -1,51 +1,7 @@
-// import { useState } from "react";
-// import { useAuth } from "../store/firebaseContext";
-
-// const Login = () => {
-//   const { login } = useAuth();
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     await login(email, password);
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-zinc-900">
-//       <form
-//         onSubmit={handleSubmit}
-//         className="bg-zinc-800 p-8 rounded-lg w-96 space-y-4"
-//       >
-//         <h2 className="text-white text-2xl font-bold">Login</h2>
-
-//         <input
-//           placeholder="Email"
-//           className="w-full p-3 bg-zinc-700 text-white"
-//           onChange={(e) => setEmail(e.target.value)}
-//         />
-
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           className="w-full p-3 bg-zinc-700 text-white"
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-
-//         <button className="w-full bg-green-600 p-3 text-white rounded">
-//           Login
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
 import { useForm } from "react-hook-form";
 import { useAuth } from "../store/firebaseContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import AppContent from "./app-content";
 
 const Login = () => {
   const { login } = useAuth();
@@ -128,7 +84,6 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-      <AppContent />
     </div>
   );
 };

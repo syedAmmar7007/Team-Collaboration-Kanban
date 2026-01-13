@@ -60,14 +60,14 @@ import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const { signup } = useAuth();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { register, handleSubmit, watch } = useForm();
   const password = watch("password");
 
   const onSubmit = async (data) => {
     try {
       await signup(data.email, data.password);
-      // navigate("/user-profile");
+      navigate("/dashboard");
     } catch (error) {
       alert(error.message);
     }
