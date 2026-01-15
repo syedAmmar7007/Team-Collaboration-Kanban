@@ -32,7 +32,7 @@ const SignUp = () => {
             </label>
             <input
               {...register("name", { required: true })}
-              placeholder="John Doe"
+              placeholder="Full Name"
               className="w-full px-4 py-3 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -43,7 +43,7 @@ const SignUp = () => {
             </label>
             <input
               {...register("email", { required: true })}
-              placeholder="you@example.com"
+              placeholder="Email"
               className="w-full px-4 py-3 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -53,7 +53,7 @@ const SignUp = () => {
             <input
               type="password"
               {...register("password", { required: true })}
-              placeholder="••••••••"
+              placeholder="Password"
               className="w-full px-4 py-3 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -67,7 +67,7 @@ const SignUp = () => {
               {...register("confirmPassword", {
                 validate: (v) => v === password || "Passwords do not match",
               })}
-              placeholder="••••••••"
+              placeholder="Confirm Password"
               className="w-full px-4 py-3 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
