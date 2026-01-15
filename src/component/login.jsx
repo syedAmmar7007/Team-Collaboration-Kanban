@@ -57,7 +57,7 @@ const Login = () => {
             <input
               {...register("email", { required: "Email is required" })}
               type="email"
-              placeholder="you@example.com"
+              placeholder="Email"
               className="w-full px-4 py-3 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.email && (
@@ -72,7 +72,7 @@ const Login = () => {
             <input
               {...register("password", { required: "Password is required" })}
               type="password"
-              placeholder="••••••••"
+              placeholder="Password"
               className="w-full px-4 py-3 bg-zinc-800 text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.password && (
