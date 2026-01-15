@@ -1,85 +1,3 @@
-// import { createContext, useContext, useEffect, useState } from "react";
-// import { auth, db } from "../firebaseConfig/firebaseConfigure";
-// import {
-//   signInWithEmailAndPassword,
-//   createUserWithEmailAndPassword,
-//   signOut,
-//   onAuthStateChanged,
-// } from "firebase/auth";
-// import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-
-// const AuthContext = createContext(null);
-
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [teams, setTeams] = useState([]);
-//   const [activeTeam, setActiveTeam] = useState(null);
-
-//   const signup = (email, password) =>
-//     createUserWithEmailAndPassword(auth, email, password);
-
-//   const login = (email, password) =>
-//     signInWithEmailAndPassword(auth, email, password);
-
-//   const logout = () => signOut(auth);
-
-//   useEffect(() => {
-//     const unsub = onAuthStateChanged(auth, (currentUser) => {
-//       setUser(currentUser);
-//       setLoading(false);
-//     });
-//     return () => unsub();
-//   }, []);
-
-//   const createTeam = async (name) => {
-//     if (!user || !name.trim()) return;
-
-//     await addDoc(collection(db, "teams"), {
-//       name,
-//       ownerId: user.uid,
-//       members: [user.uid],
-//       createdAt: Date.now(),
-//     });
-
-//     fetchTeams();
-//   };
-
-//   const fetchTeams = async () => {
-//     if (!user) return;
-
-//     const q = query(
-//       collection(db, "teams"),
-//       where("members", "array-contains", user.uid)
-//     );
-
-//     const snapshot = await getDocs(q);
-//     setTeams(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-//   };
-
-//   useEffect(() => {
-//     fetchTeams();
-//   }, [user]);
-
-//   return (
-//     <AuthContext.Provider
-//       value={{
-//         user,
-//         signup,
-//         login,
-//         logout,
-//         teams,
-//         activeTeam,
-//         setActiveTeam,
-//         createTeam,
-//       }}
-//     >
-//       {!loading && children}
-//     </AuthContext.Provider>
-//   );
-// };
-
-// export const useAuth = () => useContext(AuthContext);
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebaseConfig/firebaseConfigure";
 import {
@@ -87,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import {
   addDoc,
@@ -106,26 +25,24 @@ export const AuthProvider = ({ children }) => {
   const [teams, setTeams] = useState([]);
   const [activeTeam, setActiveTeam] = useState(null);
 
-  // Auth functions
+  const signup = async (email, password, name = "") => {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    if (name) {
+      await updateProfile(res.user, { displayName: name });
+    }
+    await addDoc(collection(db, "users"), {
+      uid: res.user.uid,
+      email: res.user.email,
+      name,
+      createdAt: Date.now(),
+    });
 
-const signup = async (email, password, name = "") => {
-  const res = await createUserWithEmailAndPassword(auth, email, password);
-
-  // 🔥 Create user in Firestore (VERY IMPORTANT)
-  await addDoc(collection(db, "users"), {
-    uid: res.user.uid,
-    email: res.user.email,
-    name,
-    createdAt: Date.now(),
-  });
-
-  return res;
-};
+    return res;
+  };
   const login = (email, password) =>
     signInWithEmailAndPassword(auth, email, password);
   const logout = () => signOut(auth);
 
-  // Team functions
   const createTeam = async (name) => {
     if (!user || !name.trim()) return;
 
@@ -135,7 +52,12 @@ const signup = async (email, password, name = "") => {
       members: [user.uid],
       createdAt: Date.now(),
     });
-
+    useEffect(() => {
+      if (user && activeTeam) {
+        const role = activeTeam.members?.[user.uid];
+        setUserRole(role);
+      }
+    }, [user, activeTeam]);
     fetchTeams();
     setActiveTeam({
       id: docRef.id,
